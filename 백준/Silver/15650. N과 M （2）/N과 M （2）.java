@@ -7,7 +7,6 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -20,11 +19,11 @@ public class Main {
 			arr[i] = i + 1;
 		}
 
-		combination(arr, new int[M], new boolean[N], 0, 0, M);
+		combination(arr, new int[M], 0, 0, M);
 
 	}
 
-	public static void combination(int[] arr, int[] out, boolean[] visited, int start, int depth, int r) {
+	public static void combination(int[] arr, int[] out, int start, int depth, int r) {
 		if (depth == r) {
 			StringBuilder sb = new StringBuilder();
 			for (int a : out) {
@@ -34,12 +33,9 @@ public class Main {
 			return;
 		}
 		for (int i = start; i < arr.length; i++) {
-			if (!visited[i]) {
-				visited[i] = true;
-				out[depth] = arr[i];
-				combination(arr, out, visited, i + 1, depth + 1, r);
-				visited[i] = false;
-			}
+			out[depth] = arr[i];
+			combination(arr, out, i + 1, depth + 1, r);
+
 		}
 	}
 
