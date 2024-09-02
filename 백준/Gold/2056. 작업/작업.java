@@ -36,11 +36,7 @@ public class Main {
 		int answer = dp[1];
 
 		for (int i = 1; i < works.length; i++) {
-			int max = Integer.MIN_VALUE;
-			if (works[i].size() == 0) {
-				dp[i + 1] = times[i + 1];
-				continue;
-			}
+			int max = 0;
 			for (Integer tmp : works[i]) {
 				max = Math.max(max, dp[tmp]);
 			}
