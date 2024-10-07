@@ -31,6 +31,6 @@ class Solution {
 			}
 		}
 		//System.out.println(end+1);
-		return end+1;
+		return start;
 	}
 }
