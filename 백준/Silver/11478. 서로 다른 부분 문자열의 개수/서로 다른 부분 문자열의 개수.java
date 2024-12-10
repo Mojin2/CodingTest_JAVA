@@ -1,30 +1,21 @@
-//ababc
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		String str = st.nextToken();
+    public static void main(String[] args) throws IOException {
 
-		int max = str.length();
-		HashSet<String> set = new HashSet<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		int len = 1;
+        String str = br.readLine();
+        Set<String> set = new HashSet<>();
 
-		for (int i = 1; i <= max; i++) {
-			for (int k = 0; k <= str.length() - i; k++) {
-				set.add(str.subSequence(k, k + i).toString());
-			}
-		}
+        for (int i = 0; i < str.length(); i++) {
+            for (int j = i + 1; j <= str.length(); j++) {
+                set.add(str.substring(i, j));
+            }
+        }
 
-		System.out.println(set.size());
-	}
+        System.out.println(set.size());
+    }
 }
