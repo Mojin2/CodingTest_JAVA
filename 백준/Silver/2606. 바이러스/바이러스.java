@@ -19,7 +19,9 @@ public class Main {
 
 	static ArrayList<Integer>[] graph;
 	static boolean[] visited;
+	static boolean[] DFSvisited;
 	static int answer = 0;
+	static int DFSanswer = 0;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -35,6 +37,7 @@ public class Main {
 			graph[i] = new ArrayList<>();
 		}
 		visited = new boolean[V + 1];
+		DFSvisited = new boolean[V + 1];
 
 		for (int i = 0; i < E; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -45,9 +48,23 @@ public class Main {
 			graph[to].add(from);
 		}
 
-		BFS(1);
+//		BFS(1);
+		DFS(1);
 
-		System.out.println(answer);
+//		System.out.println(answer);
+		System.out.println(DFSanswer-1);
+
+	}
+
+	private static void DFS(int cur) {
+		DFSvisited[cur] = true;
+		DFSanswer++;
+
+		for (int next : graph[cur]) {
+			if (!DFSvisited[next]) {
+				DFS(next);
+			}
+		}
 
 	}
 
@@ -67,6 +84,5 @@ public class Main {
 				}
 			}
 		}
-
 	}
 }
