@@ -1,70 +1,51 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.StringTokenizer;
-
-//3 6
-//HFDFFB
-//AJHGDH
-//DGAGEH
+import java.io.*;
+import java.util.*;
 
 public class Main {
-
-	static int[] dx = { 1, 0, -1, 0 };
-	static int[] dy = { 0, 1, 0, -1 };
-	static String[][] board;
-	static HashSet<String> visited;
-	static int R;
-	static int C;
-	static int max = Integer.MIN_VALUE;
-
-	public static void main(String[] args) throws IOException {
+	static int r,c;
+	static int[][] map;
+	static boolean[] checked;
+	static int max=0;
+	static int[] dx = {1,-1,0,0};
+	static int[] dy = {0,0,1,-1};
+	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		R = Integer.parseInt(st.nextToken());
-		C = Integer.parseInt(st.nextToken());
-
-		board = new String[R][C];
-		visited = new HashSet<>();
-
-		for (int i = 0; i < R; i++) {
-			st = new StringTokenizer(br.readLine());
-			board[i] = st.nextToken().split("");
+		r = Integer.parseInt(st.nextToken());
+		c = Integer.parseInt(st.nextToken());
+		
+		map = new int[r][c];
+		checked = new boolean[26];
+		for(int i=0; i<r; i++) {
+			String[] line = br.readLine().split("");
+			for(int j=0; j<line.length; j++) {
+				String alpha = line[j];
+				map[i][j] = alpha.charAt(0)-'A';
+			}
 		}
-
-		if (R == 1 && C == 1) {
-			System.out.println(1);
-			return;
-		}
-
-		DFS(0, 0, 0);
-
+        if (r == 1 && c ==1){
+            System.out.println(1);
+            return;
+        }
+		dfs(0,0,0);
 		System.out.println(max);
-
 	}
-
-	private static void DFS(int x, int y, int count) {
-		if (visited.contains(board[x][y])) {
-			max = Math.max(max, count);
+	
+	static void dfs(int x, int y, int cnt) {
+		if(checked[map[x][y]]) {
+			max = Math.max(max, cnt);
 			return;
 		}
-
-		visited.add(board[x][y]);
-
-		for (int k = 0; k < 4; k++) {
-			int nx = x + dx[k];
-			int ny = y + dy[k];
-
-			if (nx < 0 || nx >= R || ny < 0 || ny >= C)
-				continue;
-
-			DFS(nx, ny, count + 1);
-
+		else {
+			checked[map[x][y]] = true;
+			for(int i=0; i<4; i++) {
+				int nx = x + dx[i];
+				int ny = y + dy[i];
+			
+				if(nx<0 || ny <0 || nx >r-1 || ny > c-1) continue;
+				dfs(nx, ny, cnt+1);
+			}
+			checked[map[x][y]] = false;
 		}
-		visited.remove(board[x][y]);
-
 	}
 }
