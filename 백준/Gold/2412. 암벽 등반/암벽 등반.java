@@ -1,94 +1,59 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    static class Node {
-        int x;
-        int y;
+    static int N, top;
+    static Map<String, Integer> points = new HashMap<>();
+    static boolean[] visited;
 
-        public Node(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    private static Node[] graph;
-    private static int[] visited;
-    private static int n, T;
-
-    public static void main(String[] args) throws IOException, NumberFormatException {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        T = Integer.parseInt(st.nextToken());
-        graph = new Node[n + 1];
-        visited = new int[n + 1];
-        graph[0] = new Node(0, 0);
-        for (int i = 1; i <= n; i++) {
+
+        N = Integer.parseInt(st.nextToken());
+        top = Integer.parseInt(st.nextToken());
+
+        points.put("0,0", 0);
+        visited = new boolean[N + 1];
+
+        for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
-            graph[i] = new Node(x, y);
+            points.put(x + "," + y, i);
         }
-
-        Arrays.sort(graph, (o1, o2) -> {
-            if (o1.y > o2.y) {
-                return 1;
-            } else if (o1.y == o2.y) {
-                if (o1.x > o2.x) {
-                    return 1;
-                }
-            }
-            return -1;
-        });
 
         System.out.println(BFS());
     }
 
     private static int BFS() {
-        Queue<Integer> q = new LinkedList<>();
-        q.add(0);
-        visited[0] = 0;
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] { 0, 0, 0 }); // x, y, count
+        visited[0] = true;
 
-        while (!q.isEmpty()) {
-            int nowIndex = q.poll();
-            if (graph[nowIndex].y == T) {
-                return visited[nowIndex];
-            }
-            int nowX = graph[nowIndex].x;
-            int nowY = graph[nowIndex].y;
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            int x = cur[0], y = cur[1], count = cur[2];
 
-            for (int nextIndex = nowIndex + 1; nextIndex <= n; nextIndex++) {
-                if (visited[nextIndex] != 0) {
-                    continue;
-                }
-                int nextX = graph[nextIndex].x;
-                int nextY = graph[nextIndex].y;
-                if (nextY - nowY > 2) {
-                    break;
-                }
-                if (Math.abs(nextX - nowX) > 2) {
-                    continue;
-                }
-                visited[nextIndex] = visited[nowIndex] + 1;
-                q.add(nextIndex);
+            if (y == top) {
+                return count;
             }
-            for (int nextIndex = nowIndex - 1; nextIndex > 0; nextIndex--) {
-                if (visited[nextIndex] != 0) {
-                    continue;
+
+            // 현재 위치에서 상하좌우 및 대각선 2거리 이내만 탐색
+            for (int dx = -2; dx <= 2; dx++) {
+                for (int dy = -2; dy <= 2; dy++) {
+                    int nx = x + dx;
+                    int ny = y + dy;
+                    String key = nx + "," + ny;
+
+                    if (points.containsKey(key)) {
+                        int idx = points.get(key);
+                        if (!visited[idx]) {
+                            visited[idx] = true;
+                            queue.add(new int[] { nx, ny, count + 1 });
+                        }
+                    }
                 }
-                int nextX = graph[nextIndex].x;
-                int nextY = graph[nextIndex].y;
-                if (nextY - nowY < -2) {
-                    break;
-                }
-                if (Math.abs(nextX - nowX) > 2) {
-                    continue;
-                }
-                visited[nextIndex] = visited[nowIndex] + 1;
-                q.add(nextIndex);
             }
         }
         return -1;
