@@ -63,9 +63,7 @@ public class Main {
 		int max = Integer.MIN_VALUE;
 		for (int i = 0; i < N; i++) {
 			int in = Integer.MAX_VALUE;
-			// 대피소가 아닌 지점만
-			if (checked[i])
-				continue;
+
 			for (int j = 0; j < N; j++) {
 				// 대피소인 지점만
 				if (!checked[j])
