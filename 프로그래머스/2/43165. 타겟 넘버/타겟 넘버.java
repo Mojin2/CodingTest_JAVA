@@ -1,32 +1,23 @@
-import java.util.*;
 class Solution {
+    
+    static int answer = 0;
+    
     public int solution(int[] numbers, int target) {
-		return BFS(numbers.length, numbers, target);
-	}
-
-	private static int BFS(int n, int[] numbers, int target) {
-		int answer = 0;
-		ArrayDeque<Integer[]> queue = new ArrayDeque<>();
-
-		queue.add(new Integer[] { numbers[0], 1 });
-		queue.add(new Integer[] { -numbers[0], 1 });
-
-		while (!queue.isEmpty()) {
-			Integer[] tmp = queue.poll();
-			int cur = tmp[0];
-			int count = tmp[1];
-
-			if (count == n) {
-				if (cur == target) {
-					answer++;
-				}
-			} else {
-				queue.add(new Integer[] { cur - numbers[count], count + 1 });
-				queue.add(new Integer[] { cur + numbers[count], count + 1 });
-
-			}
-		}
-
-		return answer;
-	}
+        
+        backtrack(numbers,0,0,target);
+        
+        return answer;
+    }
+    
+    static void backtrack(int[] numbers, int depth, int sum, int target){
+        if (numbers.length == depth){
+            if (sum == target){
+                answer++;
+            }
+            return;
+        }
+        
+        backtrack(numbers,depth+1,sum+numbers[depth],target);
+        backtrack(numbers,depth+1,sum-numbers[depth],target);
+    }
 }
