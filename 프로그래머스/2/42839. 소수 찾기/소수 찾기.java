@@ -1,61 +1,62 @@
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
-public class Solution {
+class Solution {
+    
+    static HashSet<Integer> set = new HashSet<>();
+    
+    public int solution(String numbers) {
+        int answer = 0;
+        
+        String[] numbersArray = numbers.split("");
+        int[] numbersInt = new int[numbersArray.length];
+        for (int i =0 ;i <numbersInt.length;i++){
+            numbersInt[i] = Integer.parseInt(numbersArray[i]);
+        }
+        
+        for (int i = 1 ;i <=numbersInt.length;i++){
+            permutation(numbersInt,new boolean[numbersInt.length],new int[i],0,i);
+        }
+        
+        
+        return set.size();
+    }
+    
+    static void permutation(int[] numbers,boolean[] visited,int[] output,int depth, int r){
+        if (depth == r){
+            
+            StringBuilder sb = new StringBuilder();
 
-	static HashSet<Integer> ans = new HashSet<>();
-
-	public static void main(String[] args) {
-		String numbers = "011";
-		int ans = solution(numbers);
-		System.out.println(ans);
-	}
-
-	public static int solution(String numbers) {
-		int answer = 0;
-
-		String[] list = numbers.split("");
-
-		for (int i = 1; i <= list.length; i++) {
-			combination(list, new String[i], new boolean[list.length], 0, i);
-		}
-
-		return ans.size();
-	}
-
-	private static void combination(String[] list, String[] out, boolean[] visited, int depth, int r) {
-		if (depth == r) {
-			check(out);
-			return;
-		}
-
-		for (int i = 0; i < list.length; i++) {
-			if (!visited[i]) {
-				visited[i] = true;
-				out[depth] = list[i];
-				combination(list, out, visited, depth + 1, r);
-				visited[i] = false;
-			}
-		}
-	}
-
-	private static void check(String[] out) {
-		String t = String.join("", out);
-		int num = Integer.parseInt(t);
-		if (isPrime(num)) {
-			ans.add(num);
-		}
-
-	}
-
-	public static boolean isPrime(int n) {
-		if (n <= 1)
-			return false;
-		for (int i = 2; i <= Math.sqrt(n); i++) {
-			if (n % i == 0)
-				return false;
-		}
-		return true;
-	}
-
+            for (int num : output) {
+                sb.append(num);
+            }
+            int result = Integer.parseInt(sb.toString());
+            // System.out.println(result);
+            if (isPrime(result)){
+                set.add(result);
+            }
+            return;
+        }
+        
+        for (int i=0 ;i <numbers.length;i++){
+            if (!visited[i]){
+                visited[i] = true;
+                output[depth] = numbers[i];
+                permutation(numbers,visited,output,depth+1,r);
+                visited[i] = false;
+            }
+        }
+    }
+    
+    static boolean isPrime(int num){
+        if (num == 1 || num == 0) return false;
+        
+        for (int i = 2 ;i <num;i++){
+            if (num % i == 0){
+                return false;
+            }
+        }
+        
+        
+        return true;
+    }
 }
