@@ -1,36 +1,36 @@
+import java.util.*;
+
 class Solution {
     public static long solution(int n, int[] times) {
-		long answer = 0;
-		long max = Integer.MIN_VALUE;
-
-		for (int i = 0; i < times.length; i++) {
-			max = Math.max(max, times[i]);
-		}
-
-		long start = 1;
-		long end = max*n;
-
-		while (start <= end) {
-			long mid = (start + end) / 2;
-//			System.out.println(mid);
-
-			long count = 0;
-			for (int i = 0; i < times.length; i++) {
-				count += mid / times[i];
-			}
-
-//			if (count == n) {
-//				System.out.println(mid);
-//				return mid;
-//			}
-
-			if (count >= n) {
-				end = mid - 1;
-			} else {
-				start = mid + 1;
-			}
-		}
-		//System.out.println(end+1);
-		return start;
-	}
+        long answer = Integer.MAX_VALUE;
+        
+        long max = 0L;
+        
+        for (int time : times){
+            max = Math.max(max,time);
+        }
+        
+        long min = 1L; // 42
+        max = max * (long)n; // 60
+        
+        
+        while (min <= max){
+            long mid = (max + min)/2;
+            
+            long sum = 0;
+            for (int time : times){
+                sum += mid/time;
+            }
+            
+            if (n <= sum){
+                max = mid-1;
+                answer = mid;
+            } else {
+                min = mid+1;
+            }
+        }
+        
+        return answer;
+	
+    }
 }
